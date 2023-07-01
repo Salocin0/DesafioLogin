@@ -25,6 +25,7 @@ loginRouter.post('/login', async (req, res) => {
     return res.status(400).render('error-page', { msg: 'faltan datos' });
   }
   if (email=="adminCoder@coder.com" && password=="adminCod3r123"){
+    res.clearCookie('userId')
     res.cookie('userId', "admin", { maxAge: 3600000 });
     return res.redirect('/vista/products');
   }
@@ -34,6 +35,7 @@ loginRouter.post('/login', async (req, res) => {
       req.session.firstName = foundUser.firstName;
       req.session.email = foundUser.email;
       req.session.admin = foundUser.admin;
+      res.clearCookie('userId')
       res.cookie('userId', foundUser._id, { maxAge: 3600000 });
       return res.redirect('/vista/products');
     } else {

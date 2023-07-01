@@ -14,25 +14,28 @@ routerVistaProducts.get("/", async (req, res) => {
   const previusLink = await productService.getPrevLink(requestUrl, page, allProducts.hasPrevPage);
   const postLink = await productService.getNextLink(requestUrl, page, allProducts.hasNextPage);
   let user = null;
-  if(req.cookies.userId!="admin"){
+  if(req.cookies.userId!=="admin"){
     const userId = req.cookies.userId;
     if (userId) {
       user = await UserModel.findById(userId);
+      user.rol="Usuario"
     }
     
   }else{
     user = {
       firstName:"admin",
       lastName:"admin",
+      rol:"Admin",
       email:"adminCoder@coder.com",
     }
   }
-
   const foundUser = {
     firstName:user.firstName,
     lastName:user.lastName,
+    rol:user.rol,
     email:user.email,
   }
+ 
   
   res.status(200).render("products", {
     p: allProducts.docs.map((product) => ({
